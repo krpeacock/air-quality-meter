@@ -13,7 +13,7 @@ time.sleep(2)
 last_code = ''
 
 
-def compare_input(code):
+def handle_button(code):
     global last_code
     if code == last_code:
         return
@@ -30,14 +30,14 @@ def compare_input(code):
     clear()
     print('Displayed Text')
     print('----------------')
-    print(f'Button: {msg}\nhi')
+    print(f'Button: {msg}')
     print('----------------')
-    sio.write(f'Button: {msg}\nhi')
+    sio.write(f'Button: {msg}')
     sio.flush()
 
 
 while True:
     new_message = bytes(arduino.readline()).decode("utf-8", 'ignore')
     if(new_message != ''):
-        compare_input(new_message)
+        handle_button(new_message)
     time.sleep(.1)

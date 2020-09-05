@@ -17,7 +17,7 @@ bool stringComplete = false;  // whether the string is complete
 #define btnLEFT   3
 #define btnSELECT 4
 #define btnNONE   5
- 
+
 // read the buttons
 int read_LCD_buttons()
 {
