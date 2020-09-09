@@ -5,7 +5,7 @@ import os
 def clear(): return os.system('clear')
 
 
-arduino = serial.Serial('/dev/cu.usbmodem14201', 9600,
+arduino = serial.Serial('/dev/ttyACM0', 9600,
                         timeout=0, parity=serial.PARITY_EVEN, rtscts=1)
 sio = io.TextIOWrapper(io.BufferedRWPair(arduino, arduino))
 time.sleep(2)
