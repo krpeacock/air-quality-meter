@@ -49,7 +49,7 @@ while True:
     try:
         aqdata = pm25.read()
         all_values.insert(0, aqdata["pm25 standard"])
-        all_values = all_values[0:600]
+        all_values = all_values[0:30]
         next_value = f'{math.floor(sum(all_values) / len(all_values))}'
         if next_value != prev_value:
             if displayReady:
