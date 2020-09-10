@@ -46,10 +46,10 @@ while True:
 
     try:
         aqdata = pm25.read()
-        next_value = f'Realtime 2.5 AQI\n{aqdata["pm25 standard"]}'
+        next_value = f'{aqdata["pm25 standard"]}'
         if next_value != prev_value:
             if displayReady:
-                sio.write(f'Realtime 2.5 AQI\n{aqdata["pm25 standard"]}')
+                sio.write(f'{aqdata["pm25 standard"]}')
                 sio.flush()
             clear()
             print(f'Realtime 2.5 AQI\n{aqdata["pm25 standard"]}')
