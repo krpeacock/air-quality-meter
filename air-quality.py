@@ -9,6 +9,7 @@ import serial
 import io
 import json
 import os
+import math
 from aqi import aqi
 
 def clear(): return os.system('clear')
@@ -40,13 +41,15 @@ with open('config.json') as f:
     last_code = ''
 
 prev_value = ''
+all_values = []
 
 while True:
     time.sleep(1)
 
     try:
         aqdata = pm25.read()
-        next_value = f'{aqdata["pm25 standard"]}'
+        all_values.append(aqdata["pm25 standard"])
+        next_value = f'{sum(all_values) / len(all_values)},{aqdata["pm25 standard"]}'
         if next_value != prev_value:
             if displayReady:
                 sio.write(f'{aqdata["pm25 standard"]}')
