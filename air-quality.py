@@ -48,17 +48,20 @@ while True:
 
     try:
         aqdata = pm25.read()
-        all_values.append(aqdata["pm25 standard"])
-        next_value = f'{sum(all_values) / len(all_values)}'
+        all_values.insert(0, aqdata["pm25 standard"])
+        all_values = all_values[0:600]
+        next_value = f'{math.floor(sum(all_values) / len(all_values))}'
         if next_value != prev_value:
             if displayReady:
                 sio.write(next_value)
                 sio.flush()
             clear()
-            print(f'Realtime 2.5 AQI\n{aqdata["pm25 standard"]}')
+            print(f'Average 2.5 AQI\n{next_value}')
+            print(f'Data Points: {len(all_values)}')
         prev_value = next_value
     except RuntimeError:
         print("Unable to read from sensor, retrying...")
         continue
+
 
    
