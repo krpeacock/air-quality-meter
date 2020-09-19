@@ -41,22 +41,22 @@ with open('config.json') as f:
     last_code = ''
 
 prev_value = ''
-25_values = []
-10_values = []
+values_25 = []
+values_10 = []
 
 while True:
     time.sleep(1)
 
     try:
         aqdata = pm25.read()
-        25_values.insert(0, aqdata["pm25 standard"])
-        25_values = 25_values[0:30]
-        10_values.insert(0, aqdata["pm10 standard"])
-        10_values = 10_values[0:30]
+        values_25.insert(0, aqdata["pm25 standard"])
+        values_25 = values_25[0:30]
+        values_10.insert(0, aqdata["pm10 standard"])
+        values_10 = values_10[0:30]
 
 
-        next_25 = f'{math.floor(sum(25_values) / len(25_values))}'
-        next_10 = f'{math.floor(sum(10_values) / len(10_values))}'
+        next_25 = f'{math.floor(sum(values_25) / len(values_25))}'
+        next_10 = f'{math.floor(sum(values_10) / len(values_10))}'
         maxAQI = max(next_25, next_10)
 
         if displayReady:
@@ -66,7 +66,7 @@ while True:
         print(f'Max AQI\n{maxAQI}')
         print(f'Average 2.5 AQI\n{next_25}')
         print(f'Average 10 AQI\n{next_10}')
-        print(f'Data Points: {len(25_values)}')
+        print(f'Data Points: {len(values_25)}')
         prev_value = next_value
     except RuntimeError:
         print("Unable to read from sensor, retrying...")
