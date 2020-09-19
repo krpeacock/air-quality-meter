@@ -12,7 +12,7 @@ import os
 import math
 from aqi import aqi
 
-def clear(): return os.system('clear')
+def clear(): return 
 
 reset_pin = None
 
@@ -25,14 +25,14 @@ print("Found PM2.5 sensor, reading data...")
 
 displayReady = False
 
-with open('config.json') as f:
+with open('/home/kyle/air-quality-meter/config.json') as f:
   data = json.load(f)
   if not data.get('serial'):
     print('Warning - serial port not configured.\nProceeding without display')
 
   else:
     
-    arduino = serial.Serial('/dev/ttyACM0', 9600,
+    arduino = serial.Serial(data.get('serial'), 9600,
                             timeout=0, parity=serial.PARITY_EVEN, rtscts=1)
     sio = io.TextIOWrapper(io.BufferedRWPair(arduino, arduino))
     time.sleep(2)
@@ -44,12 +44,12 @@ prev_value = ''
 all_values = []
 
 while True:
-    time.sleep(1)
+    time.sleep(.35)
 
     try:
         aqdata = pm25.read()
         all_values.insert(0, aqdata["pm25 standard"])
-        all_values = all_values[0:30]
+        all_values = all_values[0:170]
         next_value = f'{math.floor(sum(all_values) / len(all_values))}'
         if displayReady:
             sio.write(next_value)
