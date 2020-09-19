@@ -41,22 +41,32 @@ with open('/home/kyle/air-quality-meter/config.json') as f:
     last_code = ''
 
 prev_value = ''
-all_values = []
+25_values = []
+10_values = []
 
 while True:
     time.sleep(.35)
 
     try:
         aqdata = pm25.read()
-        all_values.insert(0, aqdata["pm25 standard"])
-        all_values = all_values[0:170]
-        next_value = f'{math.floor(sum(all_values) / len(all_values))}'
+        25_values.insert(0, aqdata["pm25 standard"])
+        25_values = 25_values[0:30]
+        10_values.insert(0, aqdata["pm10 standard"])
+        10_values = 10_values[0:30]
+
+
+        next_25 = f'{math.floor(sum(25_values) / len(25_values))}'
+        next_10 = f'{math.floor(sum(10_values) / len(10_values))}'
+        maxAQI = max(next_25, next_10)
+
         if displayReady:
-            sio.write(next_value)
+            sio.write(f'D{maxAQI},${next_25},{next_10}')
             sio.flush()
         clear()
-        print(f'Average 2.5 AQI\n{next_value}')
-        print(f'Data Points: {len(all_values)}')
+        print(f'Max AQI\n{maxAQI}')
+        print(f'Average 2.5 AQI\n{next_25}')
+        print(f'Average 10 AQI\n{next_10}')
+        print(f'Data Points: {len(25_values)}')
         prev_value = next_value
     except RuntimeError:
         print("Unable to read from sensor, retrying...")

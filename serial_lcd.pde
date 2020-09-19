@@ -8,16 +8,20 @@ LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 int last_message = 0;
 int lcd_key     = 0;
 int adc_key_in  = 0;
-int current_line = 0;
-String inputString = "";         // a String to hold incoming data
-bool stringComplete = false;  // whether the string is complete
+int prev_screen = 99;
+int current_screen = 0;
+String inputString = "";        // a String to hold incoming data
+String prev_data = "";
+String serialData [ 3 ];
+String line1 = "";
+int interrupt_count = 0;
 #define btnRIGHT  0
 #define btnUP     1
 #define btnDOWN   2
 #define btnLEFT   3
 #define btnSELECT 4
 #define btnNONE   5
-
+ 
 // read the buttons
 int read_LCD_buttons()
 {
@@ -40,10 +44,22 @@ void setup()
  // reserve 200 bytes for the inputString:
  inputString.reserve(200);
  lcd.setCursor(0,0);
+ checkUpdateDisplay();
 }
-  
+void(* resetFunc) (void) = 0; //declare reset function @ address 0
+
 void loop()
 {
+  interrupt_count ++;
+  if(interrupt_count > 32000)
+  {
+//    prev_data = "";
+//    prev_screen = 99;
+//    lcd.begin(16, 2);
+//    checkUpdateDisplay();
+//    interrupt_count = 0;
+      resetFunc();  //call reset
+  }
   lcd_key = read_LCD_buttons();
   if(lcd_key != last_message){
    last_message = lcd_key;
@@ -51,10 +67,40 @@ void loop()
   }
 }
 
+void checkUpdateDisplay()
+{
+ if(current_screen == prev_screen)
+ {   
+    lcd.setCursor(0, 1); // bottom left
+    lcd.write(" ");
+    lcd.write(" ");
+    lcd.write(" ");
+    lcd.setCursor(0,1);
+    for(auto x : serialData[current_screen])
+    {
+      lcd.write(x);
+    }
+ }
+ else {
+   lcd.clear();
+   line1 = "Air Quality 2.5";
+   for(auto x : line1)
+    {
+      lcd.write(x);
+    }
+    lcd.setCursor(0,1);
+    if(serialData[current_screen]){
+      lcd.print(serialData[current_screen]);
+    }
+ }
+ prev_screen = current_screen;
+ prev_data = serialData[current_screen];
+}
+
 void serialEvent()
 {
+  memset(serialData,0,sizeof serialData); 
   while (Serial.available()) {
-    lcd.clear();
     inputString = '\0';
     // wait a bit for the entire message to arrive
     delay(100);
@@ -63,14 +109,15 @@ void serialEvent()
       char inChar = (char)Serial.read();
       inputString += inChar;
     }
+    int i = 0;
     for(auto x : inputString)
     {
-      if(x == '\n'){
-        lcd.setCursor(0,1);
+      if(x == ','){
+        i ++;
+        break;
       }
-      else {
-        lcd.write(x);
-      }
+      serialData[i] += x;
     }
+    checkUpdateDisplay();
   }
 }
