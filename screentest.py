@@ -22,10 +22,9 @@ with open('config.json') as f:
 
 prev_value = ''
 
-sio.write('foo,1,2')
-sio.flush()
+
 time.sleep(2)
 while True:
-    sio.write(f'{random.randint(0, 200)},{random.randint(0, 200)},{random.randint(0, 200)}')
+    sio.write(f'D{random.randint(0, 200)},{random.randint(0, 200)},{random.randint(0, 200)}')
     sio.flush()
-    time.sleep(1)
+    time.sleep(random.randint(0, 6))
