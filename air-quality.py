@@ -41,7 +41,7 @@ with open('/home/kyle/air-quality-meter/config.json') as f:
 
     last_code = ''
 
-prev_value = ''
+prev_out = ''
 values_25 = []
 values_10 = []
 
@@ -59,8 +59,12 @@ while True:
         next_10 = f'{aqi10(math.floor(sum(values_10) / len(values_10)))}'
         maxAQI = max(next_25, next_10)
 
+        out = f'D{maxAQI},${next_25},{next_10}'
+
         if displayReady:
-            sio.write(f'D{maxAQI},${next_25},{next_10}')
+            if out != prev_out:
+              sio.write(out)
+              prev_out = out
             sio.flush()
         clear()
         print(f'Max AQI\n{maxAQI}')
