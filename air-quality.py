@@ -10,7 +10,8 @@ import io
 import json
 import os
 import math
-from aqi import aqi
+from aqi import aqi25
+from aqi import aqi10
 
 def clear(): return 
 
@@ -54,9 +55,8 @@ while True:
         values_10.insert(0, aqdata["pm10 standard"])
         values_10 = values_10[0:30]
 
-
-        next_25 = f'{math.floor(sum(values_25) / len(values_25))}'
-        next_10 = f'{math.floor(sum(values_10) / len(values_10))}'
+        next_25 = f'{aqi25(math.floor(sum(values_25) / len(values_25)))}'
+        next_10 = f'{aqi10(math.floor(sum(values_10) / len(values_10)))}'
         maxAQI = max(next_25, next_10)
 
         if displayReady:
@@ -67,7 +67,6 @@ while True:
         print(f'Average 2.5 AQI\n{next_25}')
         print(f'Average 10 AQI\n{next_10}')
         print(f'Data Points: {len(values_25)}')
-        prev_value = next_value
     except RuntimeError:
         print("Unable to read from sensor, retrying...")
         continue
