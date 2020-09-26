@@ -79,7 +79,7 @@ while True:
         next_10 = f'{aqi10(math.floor(sum(values_10) / len(values_10)))}'
         maxAQI = max(next_25, next_10)
 
-        if int(maxAQI < 50):
+        if int(maxAQI) < 50:
           pixels.fill((0, 228, 1))
 
         out = f'{maxAQI},${next_25},{next_10}\n'
