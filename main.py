@@ -24,13 +24,13 @@ num_pixels = 30
 
 # The order of the pixel colors - RGB or GRB. Some NeoPixels have red and green reversed!
 # For RGBW NeoPixels, simply change the ORDER to RGBW or GRBW.
-ORDER = neopixel.GRB
+ORDER = neopixel.RGB
 
 pixels = neopixel.NeoPixel(
     pixel_pin, num_pixels, brightness=0.2, auto_write=False, pixel_order=ORDER
 )
 
-pixels.fill(8, 146, 208)
+pixels.fill((8, 146, 208))
 
 
 def clear(): return 
@@ -79,8 +79,8 @@ while True:
         next_10 = f'{aqi10(math.floor(sum(values_10) / len(values_10)))}'
         maxAQI = max(next_25, next_10)
 
-        if maxAQI < 50:
-          pixels.fill(0, 228, 1)
+        if int(maxAQI < 50):
+          pixels.fill((0, 228, 1))
 
         out = f'{maxAQI},${next_25},{next_10}\n'
 
