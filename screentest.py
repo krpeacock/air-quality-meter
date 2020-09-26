@@ -25,6 +25,6 @@ prev_value = ''
 
 time.sleep(2)
 while True:
-    sio.write(f'D{random.randint(0, 200)},{random.randint(0, 200)},{random.randint(0, 200)}')
+    sio.write(f'{random.randint(0, 200)},{random.randint(0, 200)},{random.randint(0, 200)}\n')
     sio.flush()
     time.sleep(random.randint(0, 6))

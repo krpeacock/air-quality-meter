@@ -82,7 +82,7 @@ while True:
         if maxAQI < 50:
           pixels.fill(0, 228, 1)
 
-        out = f'D{maxAQI},${next_25},{next_10}'
+        out = f'{maxAQI},${next_25},{next_10}\n'
 
         if displayReady:
             if out != prev_out:
